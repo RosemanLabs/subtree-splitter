@@ -21,7 +21,7 @@ jobs:
                 run: npm install
 
             -   name: Compile with ncc
-                run: npx @zeit/ncc build src/index.ts --minify
+                run: npx @vercel/ncc build src/index.ts --minify
 
             -   name: Commit & Push changes
                 uses: actions-js/push@v1.3
@@ -29,6 +29,6 @@ jobs:
                     github_token: ${{ secrets.GITHUB_TOKEN }}
                     branch: main
                     message: 'Auto-compile dist code'
-                    author_name: 'Jeroen Thora'
-                    author_email: '1374857+acrobat@users.noreply.github.com'
+                    author_name: 'splitsh automation'
+                    author_email: 'splitsh@rosemanlabs.com'
 

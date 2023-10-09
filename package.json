@@ -4,20 +4,20 @@
   "engines": {
     "node": "12"
   },
-  "author": "Jeroen Thora",
-  "license": "MIT",
+  "author": "Jeroen Thora and Roseman Labs",
+  "license": "Do not publish",
   "scripts": {
     "compile": "ncc build src/index.ts --minify"
   },
   "dependencies": {
-    "@actions/core": "^1.9.1",
-    "@actions/exec": "^1.1.0",
-    "@actions/github": "^5.0.0",
-    "@octokit/webhooks-types": "^4.3.0"
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^5.1.1",
+    "@octokit/webhooks-types": "^7.3.1"
   },
   "devDependencies": {
-    "@types/node": "^16.6.1",
-    "@vercel/ncc": "^0.29.1",
-    "typescript": "^4.3.5"
+    "@types/node": "^20.8.3",
+    "@vercel/ncc": "^0.38.0",
+    "typescript": "^5.2.2"
   }
 }

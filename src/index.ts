@@ -22,13 +22,25 @@ async function downloadSplitsh(): Promise<void> {
     fs.mkdirSync(downloadDir);
 
     let downloadPath = `${downloadDir}split-lite.tar.gz`;
-    let platform = process.platform === 'darwin' ? 'lite_darwin_amd64' : 'lite_linux_amd64';
+
+
+    if (process.platform === 'darwin') {
+        throw new Error("We do not support darwin runners");
+    }
+    let platform = 'lite_linux_amd64';
+    // let platform = process.platform === 'darwin' ? 'lite_darwin_amd64' : 'lite_linux_amd64';
 
     core.debug(`Downloading splitsh for "${platform}"`);
 
     let url = `https://github.com/splitsh/lite/releases/download/v1.0.1/${platform}.tar.gz`;
 
     await exec(`wget -O ${downloadPath} ${url}`);
+    const output = await getExecOutput("sha256sum", [downloadPath]);
+    const hash = output.stdout.split(" ")[0];
+    if (hash !== "2539301ce5e21d0ca44b689d0dd2c1b20d9f9e996c1fe6c462afb8af4e7141cc") {
+        throw new Error("Hash verification of downloaded splitsh failed");
+    }
+
     await exec(`tar -zxpf ${downloadPath} --directory ${downloadDir}`);
     await exec(`chmod +x ${downloadDir}splitsh-lite`);
     await exec(`mv ${downloadDir}splitsh-lite ${splitshPath}`);
