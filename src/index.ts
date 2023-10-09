@@ -36,7 +36,7 @@ async function downloadSplitsh(): Promise<void> {
 
     await exec(`wget -O ${downloadPath} ${url}`);
     const output = await getExecOutput("sha256sum", [downloadPath]);
-    const hash = output.stdout.split(" ")[0];
+    const hash = output.split(" ")[0];
     if (hash !== "2539301ce5e21d0ca44b689d0dd2c1b20d9f9e996c1fe6c462afb8af4e7141cc") {
         throw new Error("Hash verification of downloaded splitsh failed");
     }

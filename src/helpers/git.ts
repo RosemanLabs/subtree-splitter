@@ -5,7 +5,7 @@ import { getExecOutput } from './github';
 async function ensureRemoteExists(name: string, target: string): Promise<void> {
     try {
         await exec('git', ['remote', 'add', name, target]);
-    } catch (e) {
+    } catch (e: any) {
         if ( ! e.message.match(/failed with exit code 3$/g)) {
             throw e;
         }
