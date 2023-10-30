@@ -1,5 +1,7 @@
 # subtree-splitter action
 
+Forked from https://github.com/acrobat/subtree-splitter
+
 This actions synchronizes a monolithic repository to standalone repositories by using [splitsh-lite](https://github.com/splitsh/lite).
 
 ## Usage
