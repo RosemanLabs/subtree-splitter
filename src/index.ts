@@ -98,9 +98,12 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
         }
 
         // On push sync commits
-        await promiseAllInBatches(subtreeSplits, batchSize, async (split: subtreeSplit) => {
+        for (let split of subtreeSplits) {
             await publishSubSplit(splitshPath, split.name, branch, split.name, split.directory);
-        });
+        }
+        // await promiseAllInBatches(subtreeSplits, batchSize, async (split: subtreeSplit) => {
+        //     await publishSubSplit(splitshPath, split.name, branch, split.name, split.directory);
+        // });
     } else if (context.eventName === 'create') {
         // Tag created
         let event = context.payload as CreateEvent;
