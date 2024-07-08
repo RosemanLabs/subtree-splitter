@@ -94,13 +94,9 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
             branch = context.ref.split('/').slice(2).join("/")
         }
         else {
-            let popped_ref = context.ref.split('/').pop()
-            if (typeof popped_ref == 'undefined') {
-                core.error('Unable to get branch name from event data. Got ref "' + context.ref + '"');
+            core.error('Unable to get branch name from event data. Got ref "' + context.ref + '"');
 
-                return;
-            }
-            branch = popped_ref
+            return;
         }
 
         // On push sync commits
