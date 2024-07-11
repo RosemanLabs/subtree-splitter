@@ -54,7 +54,7 @@ async function downloadSplitsh(): Promise<void> {
 async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: number, handler: any): Promise<void> {
     let position = 0;
     while (position < subtreeSplits.length) {
-        core.info('Processing batch ' + (position / batchSize + 1) + '/'+(Math.round(subtreeSplits.length / batchSize)));
+        core.info('Processing batch ' + (position / batchSize + 1) + '/' + (Math.round(subtreeSplits.length / batchSize)));
 
         const itemsForBatch = subtreeSplits.slice(position, position + batchSize);
 
@@ -83,16 +83,18 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
         await ensureRemoteExists(split.name, split.target);
     }
 
-    if (context.eventName === 'push' ) {
+    if (context.eventName === 'push') {
         if (!context.ref.includes('refs/heads')) {
             core.info('Push event was for a tag, skipping...');
 
             return;
         }
-
-        const branch = context.ref.split('/').pop();
-        if (typeof branch == 'undefined') {
-            core.error('Unable to get branch name from event data. Got ref "'+context.ref+'"');
+        let branch = '';
+        if (context.ref.startsWith("origin/heads") || context.ref.startsWith("refs/heads")) {
+            branch = context.ref.split('/').slice(2).join("/")
+        }
+        else {
+            core.error('Unable to get branch name from event data. Got ref "' + context.ref + '"');
 
             return;
         }
@@ -116,14 +118,14 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
             let hash = await getExecOutput(splitshPath, [`--prefix=${split.directory}`, `--origin=tags/${tag}`]);
             let clonePath = `./.repositories/${split.name}/`;
 
-            fs.mkdirSync(clonePath, { recursive: true});
+            fs.mkdirSync(clonePath, { recursive: true });
 
-            await exec('git', ['clone', split.target, '.'], { cwd: clonePath});
+            await exec('git', ['clone', split.target, '.'], { cwd: clonePath });
 
             // TODO: smart tag skipping (skip patch releases where commit was previously tagged) minor and major releases should always get a tag
 
             if (!await tagExists(tag, clonePath)) {
-                await exec('git', ['tag', '-a', tag, hash, '-m', `"Tag ${tag}"`], {cwd: clonePath});
+                await exec('git', ['tag', '-a', tag, hash, '-m', `"Tag ${tag}"`], { cwd: clonePath });
             }
             await exec('git', ['push', '--tags'], { cwd: clonePath });
         });
@@ -140,12 +142,12 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
 
         await promiseAllInBatches(subtreeSplits, batchSize, async (split: subtreeSplit) => {
             let clonePath = `./.repositories/${split.name}/`;
-            fs.mkdirSync(clonePath, { recursive: true});
+            fs.mkdirSync(clonePath, { recursive: true });
 
-            await exec('git', ['clone', split.target, '.'], { cwd: clonePath});
+            await exec('git', ['clone', split.target, '.'], { cwd: clonePath });
 
             if (await tagExists(tag, clonePath)) {
-                await exec('git', ['push', '--delete', 'origin', tag], { cwd: clonePath});
+                await exec('git', ['push', '--delete', 'origin', tag], { cwd: clonePath });
             }
         });
     }
