@@ -109,7 +109,7 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
         let tag = event.ref;
 
         if (event.ref_type !== 'tag') {
-            core.info('No tag was created, skipping...');
+            core.info('No tag was created, skipping... '+context);
 
             return;
         }
