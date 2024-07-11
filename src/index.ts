@@ -84,7 +84,7 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
     }
 
     if (context.eventName === 'push') {
-        if (!context.ref.includes('refs/heads')) {
+        if (!context.ref.includes('refs/heads') && !context.ref.startsWith("origin/heads") ) {
             core.info('Push event was for a tag, skipping...');
 
             return;
