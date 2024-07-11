@@ -90,7 +90,7 @@ async function promiseAllInBatches(subtreeSplits: subtreeSplit[], batchSize: num
             return;
         }
         let branch = '';
-        if (context.ref.startsWith("origin/heads")) {
+        if (context.ref.startsWith("origin/heads") || context.ref.startsWith("refs/heads")) {
             branch = context.ref.split('/').slice(2).join("/")
         }
         else {
